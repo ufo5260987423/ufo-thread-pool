@@ -56,9 +56,8 @@
   	(call/1cc
    		(lambda (return)
        		(let loop ([job (blocking-queue-pop (thread-pool-job-queue pool))])
-				;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	 			(try
-					;; doing job
+					;; doing job, but some exception might be raised, so, try to catch them
 	  				((car job))
 	  				(except c
 		  				[(eq? c 'kill-thread)
@@ -73,24 +72,6 @@
 		     					(if fail-handler
 			 						(fail-handler c)
 			 						(error "thread-loop" (string-append "Exception raised by thread pool task with no fail-handler: " (object->string c)))))]))
-				;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-				; (with-exception-handler 
-				; 	(lambda (c)
-				; 		(cond 
-		  		; 			[(eq? c 'kill-thread)
-		   		; 			;; we don't decrement job here, as adding a 'kill-thread callback does not increment the number of tasks
-		   		; 				(with-mutex (thread-pool-mutex pool) 
-		     	; 					(thread-pool-thread-number-set! pool (- (thread-pool-thread-number pool) 1))
-		     	; 					(when (and (thread-pool-stopped? pool) (thread-pool-blocked? pool))
-		       	; 						(condition-broadcast (thread-pool-condition pool)))
-		     	; 					(return #f))]
-		  		; 			[else
-		   		; 				(let ([fail-handler (cdr job)])
-		     	; 					(if fail-handler
-			 	; 						(fail-handler c)
-			 	; 						(error "thread-loop" (string-append "Exception raised by thread pool task with no fail-handler: " (object->string c)))))]))
-				; 	(lambda () ((car job))))
-				;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 		   		(with-mutex (thread-pool-mutex pool) 
 	   				(thread-pool-job-number-set! pool (- (thread-pool-job-number pool) 1))
 	   				;; cater for a case where the number of threads in the pool has been reduced by the user
@@ -157,18 +138,10 @@
 							(when (zero? (thread-pool-thread-number pool))
 		  			;; if this fails, all is lost (that is, we may have queued tasks in the pool with no thread startable
 		  			;; to run them)
-					;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 		  						(try 
 		   							(fork-thread (lambda () (thread-loop pool)))
 		   							(thread-pool-thread-number-set! pool 1)
 		   							(except c [else #f])))
-					;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-								; (with-exception-handler 
-								; 	(lambda (c) #f)
-								; 	(lambda () 
-		   						; 		(fork-thread (lambda () (thread-loop pool)))
-		   						; 		(thread-pool-thread-number-set! pool 1))))
-					;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 					;; reset size to the actual number of threads now running after (thread-loop pool)
 							(thread-pool-size-set! pool (thread-pool-thread-number pool))
 							(when (and (thread-pool-stopped? pool) (thread-pool-blocked? pool))
