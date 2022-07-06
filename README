@@ -14,7 +14,7 @@ This package uses chez scheme's FFI to call up the pipe() and poll() system call
 This package also requires chez scheme to have been compiled with the --threads option.
 
 # API
-Usage please refer to tests/test-ufo-thread-pool.sps .
+Usage please refer to tests/test-ufo-thread-pool.sps.
 
 1. (init-thread-pool size [blocked]) =>thread-pool
 3. (thread-pool? value)=>#t/#f
@@ -27,3 +27,6 @@ Usage please refer to tests/test-ufo-thread-pool.sps .
 10. (thread-pool-add-job pool job [fail-handler])=>result 
 11. (thread-pool-stop! pool)
 12. (with-thread-pool-increment pool body0 body1 ...)
+
+# Test
+> bash test.sh
