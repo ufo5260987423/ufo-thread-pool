@@ -9,14 +9,9 @@ This package has been tested with Chez Scheme versions 9.4 and 9.5.
 
 # Requirement 
 
-This package uses chez scheme's FFI to call up the pipe() and poll()
-system calls.  It therefore requires a UNIX-like operating system to
-function correctly.  It has been tested with linux and should work on
-the BSDs and on Mac OS X. If using OS X, the glibtool package will be
-required.
+This package uses chez scheme's FFI to call up the pipe() and poll() system calls.  It therefore requires a UNIX-like operating system to function correctly.  It has been tested with linux and should work on the BSDs and on Mac OS X. If using OS X, the glibtool package will be required.
 
-This package also requires chez scheme to have been compiled with the
---threads option.
+This package also requires chez scheme to have been compiled with the --threads option.
 
 # API
 Usage please refer to tests/test-ufo-thread-pool.sps .
