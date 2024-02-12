@@ -29,6 +29,9 @@
 
 (define init-thread-pool
     (case-lambda
+    	[() 
+			(let-values ([(in out err pid) (open-process-ports "nproc" 'block (make-transcoder (utf-8-codec)))])
+				(init-thread-pool (string->number (get-string-all out)) #t))]
     	[(size) (init-thread-pool size #t)]
       	[(size blocked)
       		(when (< size 1)

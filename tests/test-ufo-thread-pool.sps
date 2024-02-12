@@ -4,9 +4,11 @@
 ;; SPDX-License-Identifier: MIT
 #!r6rs
 
-(import (rnrs (6)) (srfi :64 testing) (ufo-thread-pool))
+(import (chezscheme) (srfi :64 testing) (ufo-thread-pool))
 
 (test-begin "Test 1: default settings")
+(let-values ([(in out err pid) (open-process-ports "nproc" 'block (make-transcoder (utf-8-codec)))])
+	(test-equal (string->number (get-string-all out)) (thread-pool-thread-number-ref (init-thread-pool) pool)))
 (let ([pool (init-thread-pool 4)])
     (test-equal 0 (thread-pool-job-number-ref pool))
     (test-equal 4 (thread-pool-thread-number-ref pool))

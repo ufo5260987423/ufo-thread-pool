@@ -16,17 +16,17 @@ This package also requires chez scheme to have been compiled with the --threads 
 # API
 Usage please refer to tests/test-ufo-thread-pool.sps.
 
-1. (init-thread-pool size [blocked]) =>thread-pool
-3. (thread-pool? value)=>#t/#f
-4. (thread-pool-blocked?-ref pool)=>#t/#f
-5. (thread-pool-blocked?-change pool #f/#t)=>#t/#f
-6. (thread-pool-thread-number-ref pool)=>thread-number
-7. (thread-pool-job-number-ref pool)=>job-number
-8. (thread-pool-size-ref pool)=>size
-9. (thread-pool-size-add pool value)=>size
-10. (thread-pool-add-job pool job [fail-handler])=>result 
-11. (thread-pool-stop! pool)
-12. (with-thread-pool-increment pool body0 body1 ...)
+1. (init-thread-pool [size] [blocked]) =>thread-pool
+2. (thread-pool? value)=>#t/#f
+3. (thread-pool-blocked?-ref pool)=>#t/#f
+4. (thread-pool-blocked?-change pool #f/#t)=>#t/#f
+5. (thread-pool-thread-number-ref pool)=>thread-number
+6. (thread-pool-job-number-ref pool)=>job-number
+7. (thread-pool-size-ref pool)=>size
+8. (thread-pool-size-add pool value)=>size
+9. (thread-pool-add-job pool job [fail-handler])=>result 
+10. (thread-pool-stop! pool)
+11. (with-thread-pool-increment pool body0 body1 ...)
 
 # Test
 > bash test.sh
