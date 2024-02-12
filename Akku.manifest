@@ -1,7 +1,7 @@
 #!r6rs ; -*- mode: scheme; coding: utf-8 -*-
 (import (akku format manifest))
 
-(akku-package ("ufo-thread-pool" "1.0.1")
+(akku-package ("ufo-thread-pool" "1.0.2")
   (synopsis "This package is a dependable thread pool package for chez scheme.")
   (authors "WANG Zheng")
   (license "MIT")
