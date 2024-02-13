@@ -13,7 +13,11 @@
 		thread-pool-add-job
    		thread-pool-stop!
    		with-thread-pool-increment)
-  (import (chezscheme) (ufo-thread-pool util blocking-queue) (ufo-thread-pool util try))
+	(import 
+		(chezscheme) 
+		(ufo-thread-pool util blocking-queue) 
+		(ufo-thread-pool util try)
+		(only (srfi :13 strings) string-drop-right string-suffix?))
 
 (define-record-type thread-pool
   	(fields 
@@ -30,8 +34,10 @@
 (define init-thread-pool
     (case-lambda
     	[() 
-			(let-values ([(in out err pid) (open-process-ports "nproc" 'block (make-transcoder (utf-8-codec)))])
-				(init-thread-pool (string->number (get-string-all out)) #t))]
+			(if (linux?)
+				(let-values ([(in out err pid) (open-process-ports "nproc" 'block (make-transcoder (utf-8-codec)))])
+					(init-thread-pool (string->number (string-drop-right (get-string-all out) 1)) #t))
+				(raise "init-thread-pool without pool-size only works for Linux null!"))]
     	[(size) (init-thread-pool size #t)]
       	[(size blocked)
       		(when (< size 1)
@@ -243,4 +249,7 @@
 	 				(lambda () body0 body1 ...)
 					;;out
 	 				(lambda () (thread-pool-size-add p -1))))]))
+
+(define (linux?)
+  (string-suffix? "le" (symbol->string (machine-type))))
 )
