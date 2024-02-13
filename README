@@ -17,6 +17,7 @@ This package also requires chez scheme to have been compiled with the --threads 
 Usage please refer to tests/test-ufo-thread-pool.sps.
 
 1. (init-thread-pool [size] [blocked]) =>thread-pool
+>NOTE: (init-tread-pool) with auto-confiured pool size is only available to Linux.
 2. (thread-pool? value)=>#t/#f
 3. (thread-pool-blocked?-ref pool)=>#t/#f
 4. (thread-pool-blocked?-change pool #f/#t)=>#t/#f
