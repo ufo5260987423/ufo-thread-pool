@@ -34,10 +34,13 @@
 (define init-thread-pool
     (case-lambda
     	[() 
-			(if (linux?)
-				(let-values ([(in out err pid) (open-process-ports "nproc" 'block (make-transcoder (utf-8-codec)))])
-					(init-thread-pool (string->number (string-drop-right (get-string-all out) 1)) #t))
-				(raise "init-thread-pool without pool-size only works for Linux null!"))]
+			(cond 
+				[(linux?) 
+					(let-values ([(in out err pid) (open-process-ports "nproc" 'block (make-transcoder (utf-8-codec)))])
+						(init-thread-pool (string->number (string-drop-right (get-string-all out) 1)) #t))]
+				[(macos?) 
+					(init-thread-pool 4 #t)]
+				[else (init-thread-pool 8 #t)])]
     	[(size) (init-thread-pool size #t)]
       	[(size blocked)
       		(when (< size 1)
@@ -249,6 +252,9 @@
 	 				(lambda () body0 body1 ...)
 					;;out
 	 				(lambda () (thread-pool-size-add p -1))))]))
+
+(define (macos?)
+  (string-suffix? "osx" (symbol->string (machine-type))))
 
 (define (linux?)
   (string-suffix? "le" (symbol->string (machine-type))))
