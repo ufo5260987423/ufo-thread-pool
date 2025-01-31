@@ -39,7 +39,8 @@
 					(let-values ([(in out err pid) (open-process-ports "nproc" 'block (make-transcoder (utf-8-codec)))])
 						(init-thread-pool (string->number (string-drop-right (get-string-all out) 1)) #t))]
 				[(macos?) 
-					(init-thread-pool 4 #t)]
+					(let-values ([(in out err pid) (open-process-ports "sysctl -n hw.ncpu" 'block (make-transcoder (utf-8-codec)))])
+						(init-thread-pool (string->number (string-drop-right (get-string-all out) 1)) #t))]
 				[else (init-thread-pool 8 #t)])]
     	[(size) (init-thread-pool size #t)]
       	[(size blocked)
