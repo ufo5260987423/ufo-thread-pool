@@ -2,19 +2,20 @@
 
 (library (ufo-thread-pool util blocking-queue)
 	(export 
-		init-blocking-queue
+		make-blocking-queue
 		blocking-queue-pop
 		blocking-queue-push)
   (import (chezscheme) (slib queue))
 
 (define-record-type blocking-queue 
-  	(fields 
+  (fields 
 		(immutable mutex)
 	  	(immutable condition)
-	  	(immutable queue)))
-   
-(define (init-blocking-queue)
-  	(make-blocking-queue (make-mutex) (make-condition) (make-queue)))
+	  	(immutable queue))
+	(protocol
+    (lambda (new)
+      (lambda ()
+        (new (make-mutex) (make-condition) (make-queue))))))
 
 (define (blocking-queue-pop queue)
     (with-mutex (blocking-queue-mutex queue)

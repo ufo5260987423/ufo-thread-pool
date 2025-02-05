@@ -2,8 +2,11 @@
 (import (akku format manifest))
 
 (akku-package ("ufo-thread-pool" "1.0.4")
-  (synopsis "This package is a dependable thread pool package for chez scheme.")
+  (synopsis
+   "This package is a dependable thread pool package for chez scheme.")
   (authors "WANG Zheng")
   (license "MIT")
-  (depends ((slib queue) "^3.1.5") ("chez-srfi" ">=0.0.0-akku <1.0.0"))
+  (depends ("ufo-try" "^1.0.0")
+           ((slib queue) "^3.1.5")
+           ("chez-srfi" ">=0.0.0-akku <1.0.0"))
 )
